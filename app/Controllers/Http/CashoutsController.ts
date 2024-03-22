@@ -98,6 +98,10 @@ export default class CashoutsController {
     // Process the bet here
     console.log('Bet amount:', amount);
 
+    //if game has started, reject
+    if (hst.started)
+      throw new Error('Game has started')
+
     // Perform other operations with the bet amount
     //deduct amount from user account
     let newBal = Number((user.balance - amount).toFixed(2))

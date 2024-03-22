@@ -14,6 +14,9 @@ export default class OddsHistory extends BaseModel {
   @column()
   public active: boolean
 
+  @column()
+  public started: boolean
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 

@@ -9,6 +9,7 @@ export default class extends BaseSchema {
       table.float('odd').nullable()
       table.string('uuid')
       table.boolean('active').defaultTo(true)
+      table.boolean('started').defaultTo(false)
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
     })

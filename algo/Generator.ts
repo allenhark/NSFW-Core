@@ -70,7 +70,7 @@ export default class Generator {
       await this.closeOpen()
 
       //save number to database
-      await OddsHistory.create({
+      let game = await OddsHistory.create({
         odd: Number(finalNumber.toFixed(2)),
         uuid: uuid,
         active: true
@@ -89,9 +89,11 @@ export default class Generator {
 
       Event.emit('wait', true)
 
-      await new Promise(resolve => setTimeout(resolve, 30000));
+      await new Promise(resolve => setTimeout(resolve, 10000));
 
       Event.emit('wait', false)
+      game.started = true
+      await game.save()
 
     }
   }

@@ -62,6 +62,9 @@ Route.group(() => {
   //history
   Route.get('history', 'MoniesController.history')
 
+  //dimba
+  Route.post('dimba', 'GoalsController.show')
+
 })
   .prefix('v1')
   .middleware(['auth'])
