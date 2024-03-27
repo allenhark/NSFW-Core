@@ -20,6 +20,7 @@ export default class extends BaseSchema {
       table.string('install_time').nullable()
       table.string('build_version').nullable()
       table.string('run_time_version').nullable()
+      table.string('language').nullable()
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
     })

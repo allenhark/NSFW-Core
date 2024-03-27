@@ -10,7 +10,7 @@ export default class AuthController {
    * @param param0
    * @returns
    */
-  async login({ request, response, auth }) {
+  async login({ request, response, auth, transform }) {
 
     let data = request.all();
 
@@ -99,7 +99,7 @@ export default class AuthController {
   /**
    * update user account
    */
-  async update({ request, response, auth }) {
+  async update({ request, response, auth, transform }) {
 
     const user = await auth.use('api').authenticate()
 
@@ -119,12 +119,12 @@ export default class AuthController {
   /**
  * Register device
  */
-  async registerDevice({ request, response, auth }) {
+  async registerDevice({ request, response }) {
 
     let device = request.all();
-    const user = await auth.use('api').authenticate()
 
-    device.customer_id = user.id;
+    console.log(device)
+
     device.deviceName = emojiStrip(device.deviceName);
 
     //check if device exists
@@ -144,14 +144,14 @@ export default class AuthController {
 
     }
 
-    return response.json(deviceData);
+    return response.json({ message: "Device registered successfully" });
 
   }
 
   /**
    * Return my information
    */
-  async me({ auth, response }) {
+  async me({ auth, response, transform }) {
     const user = await auth.use('api').authenticate()
 
     let customerData = await User.query()

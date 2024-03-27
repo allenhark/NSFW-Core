@@ -47,6 +47,9 @@ export default class Device extends BaseModel {
   @column()
   public runTimeVersion: string
 
+  @column()
+  public language: string
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 

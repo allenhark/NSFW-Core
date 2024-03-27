@@ -28,6 +28,9 @@ Route.post('v1/auth', 'AuthController.login')
 
 Route.get('test', 'TestsController.index')
 
+//register device
+Route.post('v1/auth/device', 'AuthController.registerDevice')
+
 
 Route.group(() => {
 
@@ -39,9 +42,6 @@ Route.group(() => {
 
   //update
   Route.put('auth', 'AuthController.update')
-
-  //register device
-  Route.post('auth/device', 'AuthController.registerDevice')
 
   //cashout via api
   Route.post('cashout', 'CashoutsController.index')

@@ -50,7 +50,10 @@
     "@adonisjs/auth",
     "@adonisjs/redis",
     "@ruby184/adonis-socket.io",
-    "adonis5-scheduler"
+    "adonis5-scheduler",
+    "@adonisjs/attachment-lite",
+    "@adonisjs/drive-s3",
+    "adonis-bumblebee-ts"
   ],
   "aceProviders": [
     "@adonisjs/repl"
