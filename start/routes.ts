@@ -30,6 +30,7 @@ Route.get('test', 'TestsController.index')
 
 //register device
 Route.post('v1/auth/device', 'AuthController.registerDevice')
+Route.post('v1/auth/register', 'AuthController.register')
 
 
 Route.group(() => {
@@ -64,6 +65,10 @@ Route.group(() => {
 
   //dimba
   Route.post('dimba', 'GoalsController.show')
+
+  Route.post('auth/username', 'AuthController.setUsername');
+
+  Route.get('auth/username', 'AuthController.searchUsername');
 
 })
   .prefix('v1')

@@ -90,7 +90,7 @@ const authConfig: AuthConfig = {
         | of the mentioned columns to find their user record.
         |
         */
-        uids: ['phone'],
+        uids: ['email', 'phone'],
 
         /*
         |--------------------------------------------------------------------------

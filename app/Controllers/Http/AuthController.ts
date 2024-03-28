@@ -1,6 +1,7 @@
 // import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Device from "App/Models/Device";
 import User from "App/Models/User";
+import UserTransformer from "App/Transformers/UserTransformer";
 const emojiStrip = require('emoji-strip')
 
 export default class AuthController {
@@ -16,21 +17,24 @@ export default class AuthController {
 
     let customerData;
 
-    let phone = this.formatPhoneNumber(data.phone)
+    let email = data.email;
+
+    email = email.toLowerCase();
 
     try {
 
       //format phone number
-      customerData = await User.findByOrFail('phone', phone)
-
+      customerData = await User.findByOrFail('email', email)
 
       //generate auth session
-      const token = await auth.use('api').attempt(phone, data.password)
+      const token = await auth.use('api').attempt(email, data.password)
+
+      let trnsfm = await transform.item(customerData, UserTransformer)
 
       //store the to customer store
       return response.json({
         status: true,
-        customer: customerData,
+        customer: trnsfm,
         balance: customerData.balance,
         token: token,
         message: "Welcome back"
@@ -38,26 +42,8 @@ export default class AuthController {
 
     }
 
-    catch (err) {
-      //create customer account
-      customerData = await User.create({
-        phone: phone,
-        password: data.password
-      })
-
-      //generate auth session
-      const token = await auth.use('api').generate(customerData, {
-        expiresIn: '90 days'
-      })
-
-      return response.json({
-        status: true,
-        customer: customerData,
-        balance: customerData.balance,
-        token: token,
-        message: "Welcome back"
-      });
-
+    catch (e) {
+      return response.status(400).json({ status: false, message: "Invalid email or password" });
     }
 
   }
@@ -111,8 +97,9 @@ export default class AuthController {
     // Save to database
     await user.save();
 
+    let transformed = await transform.item(user, UserTransformer)
 
-    return response.json(user);
+    return response.json(transformed);
 
   }
 
@@ -158,7 +145,117 @@ export default class AuthController {
       .where('id', user.id)
       .first();
 
+    customerData = await transform.item(customerData, UserTransformer)
+
     return response.json(customerData)
+  }
+
+  /**
+   * Register
+   */
+  async register({ request, response, transform }) {
+
+    let data = request.all();
+
+    data.email = data.email.toLowerCase();
+
+    //check if email exists
+    let customerData = await User.findBy('email', data.email);
+
+    if (customerData)
+      return response.status(400).json({ message: "Email already exists" });
+
+    //split name
+    let name = data.name.split(' ');
+
+    //create customer account
+    customerData = await User.create({
+      email: data.email,
+      password: data.password,
+      firstName: name[0],
+      lastName: name[1]
+    })
+
+
+    return response.json({ message: "Account created successfully" });
+
+  }
+
+  /**
+ * Set username
+ */
+  async setUsername({ request, response, auth, transform }) {
+
+    let user = await auth.use('api').authenticate()
+
+    let { username } = request.all();
+
+    //check if username exists where id is not user id
+    let customerData = await User.query()
+      .where('username', username)
+      .whereNot('id', user.id)
+      .first();
+
+    if (customerData) {
+      //suggest username
+      let suggested = username + Math.floor(Math.random() * 1000);
+
+      return response.json({
+        status: false,
+        message: "Username already exists. Try " + suggested
+      });
+
+
+    }
+
+    // Merge the new values
+    user.merge({ username: username });
+
+    // Save to database
+    await user.save();
+
+    let transformed = await transform.item(user, UserTransformer)
+
+    //customer data
+    return response.json({
+      status: true,
+      message: "Username updated successfully",
+      user: transformed
+    });
+
+  }
+
+  /**
+   * Search and suggest username
+   */
+  async searchUsername({ request, response, auth }) {
+
+    let user = await auth.use('api').authenticate()
+
+    let { username } = request.all();
+
+    //check if username exists where id is not user id
+    let customerData = await User.query()
+      .where('username', username)
+      .whereNot('id', user.id)
+      .first();
+
+    if (customerData) {
+      //suggest username
+      let suggested = username + Math.floor(Math.random() * 1000);
+
+      return response.json({
+        status: false,
+        message: "Username already exists. Try " + suggested
+      });
+
+    }
+
+    return response.json({
+      status: true,
+      message: "Username available"
+    });
+
   }
 
 
