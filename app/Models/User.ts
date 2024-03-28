@@ -34,7 +34,7 @@ export default class User extends BaseModel {
   public email: string
 
   @attachment({ folder: 'avatars', preComputeUrl: true })
-  public avatar: AttachmentContract
+  public avatar: AttachmentContract | null
 
   @column()
   public wallet: string
