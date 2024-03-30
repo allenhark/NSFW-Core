@@ -1,7 +1,9 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, beforeCreate } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, beforeCreate, hasMany, HasMany, afterFetch } from '@ioc:Adonis/Lucid/Orm'
 import { string } from '@ioc:Adonis/Core/Helpers'
-
+import EscortMedia from './EscortMedia'
+import { nanoid } from 'nanoid'
+// const nanoid = require('nanoid')
 export default class Escort extends BaseModel {
   @column({ isPrimary: true })
   public id: number
@@ -49,6 +51,9 @@ export default class Escort extends BaseModel {
   public price: string
 
   @column()
+  public services: string
+
+  @column()
   public gay: boolean
 
   @column()
@@ -61,7 +66,16 @@ export default class Escort extends BaseModel {
   public showProfile: boolean
 
   @column()
+  public linkProfile: boolean
+
+  @column()
   public isActive: boolean
+
+  @column()
+  public views: number
+
+  @hasMany(() => EscortMedia)
+  public media: HasMany<typeof EscortMedia>
 
   @column.dateTime()
   public nextSubscriptionRenew: DateTime
@@ -85,7 +99,21 @@ export default class Escort extends BaseModel {
       return string.replace(/\s+/g, '-').toLowerCase()
     }
 
-    escort.uuid = nm + '-' + string.generateRandom(5)
+    escort.uuid = nm + '-' + nanoid(5)
 
   }
+
+  //increment views
+  // @afterFetch()
+  // public static async afterFetch(escort: Escort) {
+
+  //   //increment views
+  //   escort.views = escort.views + 1
+
+  //   //save
+  //   await escort.save()
+
+  // }
+
+
 }

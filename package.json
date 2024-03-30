@@ -37,6 +37,7 @@
     "luxon": "^3.4.4",
     "moment": "^2.30.1",
     "mysql2": "^3.9.2",
+    "nanoid": "3.0.0",
     "proxy-addr": "^2.0.7",
     "pure-rand": "^6.0.4",
     "random-seed-weighted-chooser": "^1.1.10",

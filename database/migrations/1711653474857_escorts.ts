@@ -19,16 +19,19 @@ export default class extends BaseSchema {
       table.string('city').nullable()
       table.string('region').nullable()
       table.text('bio').nullable()
-      table.text('price').nullable()
+      table.text('services').nullable()
+      table.string('price').nullable()
 
       table.boolean('gay').defaultTo(false)
       table.boolean('lesbian').defaultTo(false)
       table.boolean('straight').defaultTo(true)
 
       table.boolean('show_profile').defaultTo(true)
+      table.boolean('link_profile').defaultTo(true)
 
       table.boolean('is_active').defaultTo(false)
       table.dateTime('next_subscription_renew').nullable()
+      table.integer('views').defaultTo(0)
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
     })
