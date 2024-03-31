@@ -15,6 +15,7 @@ export default class extends BaseSchema {
       table.string('username').nullable()
       table.string('email').nullable()
       table.json('avatar')
+      table.json('background')
       table.string('wallet').nullable()
       table.string('referral_code').nullable()
       table.integer('referral_id').nullable()

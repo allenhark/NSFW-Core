@@ -45,30 +45,21 @@ export default class EscortsController {
    * get all escorts with country, region, city, gay, lesbian, age, straight, bi filters
    */
   public async index({ request, response, transform }) {
-    let { country, region, city, gay, lesbian, straight, gender } = request.all()
+    let { countryCode, region, city, gender } = request.all()
 
-    // console.log('Escorts query')
+    console.log('Escorts query', request.all())
 
     let escorts = Escort.query()
     //.where('is_active', true)
 
-    if (country)
-      escorts.where('country', country)
+    if (countryCode)
+      escorts.where('country_code', countryCode)
 
     if (region)
       escorts.where('region', region)
 
     if (city)
       escorts.where('city', city)
-
-    if (gay)
-      escorts.where('gay', true)
-
-    if (lesbian)
-      escorts.where('lesbian', true)
-
-    if (straight)
-      escorts.where('straight', true)
 
     if (gender)
       escorts.where('gender', gender)

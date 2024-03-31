@@ -11,7 +11,14 @@ export default class UserTransformer extends TransformerAbstract {
       balance: model.balance,
       username: model.username,
       refferalCode: model.refferalCode,
-
+      country: model.country,
+      language: model.language,
+      wallet: model.wallet,
+      wallet_network: model.wallet_network,
+      background: model.background,
+      is_creator: model.is_creator,
+      verified: model.verified,
+      is_active: model.active
     }
   }
 }
