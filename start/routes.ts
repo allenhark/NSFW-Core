@@ -70,6 +70,10 @@ Route.group(() => {
 
   Route.get('auth/username', 'AuthController.searchUsername');
 
+  //avator
+  Route.post('auth/avatar', 'AuthController.updateAvator');
+  Route.post('auth/background', 'AuthController.updateBackground');
+
 })
   .prefix('v1')
   .middleware(['auth'])

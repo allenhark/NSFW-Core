@@ -6,6 +6,7 @@ export default class extends BaseSchema {
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
+      table.string('uuid').nullable().unique()
       table.string('phone', 13).nullable().unique()
       table.string('password', 180).notNullable()
       table.string('remember_me_token').nullable()
@@ -27,6 +28,9 @@ export default class extends BaseSchema {
       table.boolean('active').defaultTo(true)
       table.boolean('verified').defaultTo(false)
       table.boolean('is_creator').defaultTo(false)
+      table.integer('followers').defaultTo(0)
+      table.integer('following').defaultTo(0)
+      table.integer('subscribers').defaultTo(0)
       table.timestamp('created_at', { useTz: true }).notNullable()
       table.timestamp('updated_at', { useTz: true }).notNullable()
     })

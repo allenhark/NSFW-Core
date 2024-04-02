@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
 import { column, beforeSave, BaseModel } from '@ioc:Adonis/Lucid/Orm'
+import { nanoid } from 'nanoid'
 import {
   attachment,
   AttachmentContract
@@ -8,6 +9,9 @@ import {
 export default class User extends BaseModel {
   @column({ isPrimary: true })
   public id: number
+
+  @column()
+  public uuid: string
 
   @column()
   public phone: string
@@ -69,6 +73,15 @@ export default class User extends BaseModel {
   @column()
   public isCreator: boolean
 
+  @column()
+  public followers: number
+
+  @column()
+  public following: number
+
+  @column()
+  public subscribers: number
+
   @column({ serializeAs: null })
   public password: string
 
@@ -86,5 +99,8 @@ export default class User extends BaseModel {
     if (user.$dirty.password) {
       user.password = await Hash.make(user.password)
     }
+
+    user.uuid = user.firstName + '-' + user.lastName + '-' + nanoid(6)
+
   }
 }

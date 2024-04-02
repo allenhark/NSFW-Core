@@ -35,7 +35,7 @@ export default class EscortsController {
   public async me({ auth, transform }) {
     let user = await auth.use('api').authenticate()
 
-    let escort = await Escort.findBy('userId', user.id)
+    let escort = await Escort.findByOrFail('user_id', user.id)
 
     return transform.item(escort, EscortTransformer)
   }

@@ -2,6 +2,8 @@
 import Device from "App/Models/Device";
 import User from "App/Models/User";
 import UserTransformer from "App/Transformers/UserTransformer";
+import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
+
 const emojiStrip = require('emoji-strip')
 
 export default class AuthController {
@@ -90,6 +92,8 @@ export default class AuthController {
     const user = await auth.use('api').authenticate()
 
     let data = request.all();
+
+    delete data.name
 
     // Merge the new values
     user.merge(data);
@@ -256,6 +260,62 @@ export default class AuthController {
       message: "Username available"
     });
 
+  }
+
+  /**
+   * Update background image
+   */
+  async updateBackground({ request, response, auth, transform }) {
+
+    const user = await auth.use('api').authenticate()
+
+    let file = request.file('image')!
+
+    //console.log(request.all(), file)
+
+    if (!file) {
+      return response.status(400).json({
+        message: 'No file found'
+      })
+    }
+
+
+    //save to user
+    user.background = await Attachment.fromFile(file)
+
+    await user.save()
+
+    let transformed = await transform.item(user, UserTransformer)
+
+    return response.json(transformed)
+  }
+
+  /**
+   * Update avator
+   */
+  async updateAvator({ request, response, auth, transform }) {
+
+    const user = await auth.use('api').authenticate()
+
+    let file = request.file('image')!
+
+    //console.log(request.all(), file)
+
+    if (!file) {
+      return response.status(400).json({
+        message: 'No file found'
+      })
+    }
+
+
+    //save to user
+    user.avatar = await Attachment.fromFile(file)
+
+    await user.save()
+
+    let transformed = await transform.item(user, UserTransformer)
+
+    return response.json(transformed)
   }
 
 
