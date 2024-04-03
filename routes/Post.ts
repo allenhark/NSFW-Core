@@ -12,6 +12,17 @@ Route.group(() => {
   //publish
   Route.post('/publish/:uuid', 'PostsController.publish')
 
+  //Like Unlike post
+  Route.post('/like/:uuid', 'PostsController.like')
+
+  //post comment
+  Route.post('/comment/:uuid', 'PostsController.comment')
+
+  //delete comment
+  Route.delete('/comment/:id', 'PostsController.deleteComment')
+
+  //report post
+  Route.post('/report/:uuid', 'PostsController.report')
 
 })
   .prefix('v1/posts')

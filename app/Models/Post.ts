@@ -3,6 +3,9 @@ import { BaseModel, column, beforeSave, hasMany, HasMany, belongsTo, BelongsTo }
 import { nanoid } from 'nanoid'
 import PostImage from './PostImage'
 import User from './User'
+import PostLiker from './PostLiker'
+import PostComment from './PostComment'
+import PostReport from './PostReport'
 
 export default class Post extends BaseModel {
   @column({ isPrimary: true })
@@ -67,6 +70,15 @@ export default class Post extends BaseModel {
 
   @belongsTo(() => User)
   public author: BelongsTo<typeof User>
+
+  @hasMany(() => PostLiker)
+  public likers: HasMany<typeof PostLiker>
+
+  @hasMany(() => PostComment)
+  public comments: HasMany<typeof PostComment>
+
+  @hasMany(() => PostReport)
+  public reports: HasMany<typeof PostReport>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

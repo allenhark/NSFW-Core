@@ -120,7 +120,7 @@ export default class PostsController {
       //transform
       let esc = await transform.item(post, PostTransformer)
 
-      let media = await transform.collection(post.media, (media) => {
+      let media = await transform.collection(post.images, (media) => {
         //console.log(media)
         return {
           ...media.media,
