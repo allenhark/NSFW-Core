@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import { BaseModel, column, belongsTo, BelongsTo, beforeCreate } from '@ioc:Adonis/Lucid/Orm'
 import { nanoid } from 'nanoid'
 import Post from './Post'
+import User from './User'
 
 export default class PostComment extends BaseModel {
   @column({ isPrimary: true })
@@ -21,6 +22,9 @@ export default class PostComment extends BaseModel {
 
   @belongsTo(() => Post)
   public post: BelongsTo<typeof Post>
+
+  @belongsTo(() => User)
+  public author: BelongsTo<typeof User>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

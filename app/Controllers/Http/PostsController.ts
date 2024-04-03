@@ -6,6 +6,8 @@ import PostImage from "App/Models/PostImage";
 import PostTransformer from "App/Transformers/PostTransformer";
 import UserTransformer from "App/Transformers/UserTransformer";
 import AuthorTransformer from "App/Transformers/AuthorTransfomer";
+import PostComment from "App/Models/PostComment";
+import CommentsTransformer from "App/Transformers/CommentsTransfomer";
 
 export default class PostsController {
 
@@ -144,10 +146,133 @@ export default class PostsController {
 
     return response.json(serial)
 
+  }
 
-    return response.json(posts)
+  /**
+   * Like or unlike post
+   */
+  async like({ request, response, auth, params }) {
+
+    let user = await auth.use('api').authenticate()
+
+    let post = await Post.findByOrFail('uuid', params.uuid)
+
+    let like = await post.related('likers').query().where('user_id', user.id).first()
+
+    let liked = true;
+
+    if (like) {
+      await like.delete()
+      liked = false;
+      post.likesCount = post.likesCount - 1
+    } else {
+      await post.related('likers').create({ userId: user.id })
+
+      post.likesCount = post.likesCount + 1
+    }
+
+    await post.save()
+
+    return response.json({ message: 'success', liked: liked })
 
   }
 
+  /**
+   * Get of user has likes
+   */
+  async hasLiked({ request, response, auth, params }) {
+
+    let user = await auth.use('api').authenticate()
+
+    let post = await Post.findByOrFail('uuid', params.uuid)
+
+    let like = await post.related('likers').query().where('user_id', user.id).first()
+
+    return response.json({ liked: like ? true : false })
+  }
+
+  /**
+   * Create comment
+   */
+  async createComment({ request, response, auth, params }) {
+
+    let user = await auth.use('api').authenticate()
+
+    let post = await Post.findByOrFail('uuid', params.uuid)
+
+    let data = request.all()
+
+    let comment = await post.related('comments').create({ userId: user.id, comment: data.comment })
+
+    post.commentsCount = post.commentsCount + 1
+
+    await post.save()
+
+    return response.json(comment)
+
+  }
+
+  /**
+   * delete comment
+   */
+  async deleteComment({ response, params, auth }) {
+
+    let user = await auth.use('api').authenticate()
+
+    let comment = await PostComment.query().where('uuid', params.uuid).where('user_id', user.id).firstOrFail()
+
+    let post = await Post.findOrFail(comment.postId)
+
+    post.commentsCount = post.commentsCount - 1
+
+    await post.save()
+
+    await comment.delete()
+
+    return response.json({ message: 'Comment deleted' })
+
+  }
+
+  /**
+   * Get comments
+   */
+  async getComments({ request, response, params, transform }) {
+
+    let post = await Post.findByOrFail('uuid', params.uuid)
+
+    let page = request.all().page || 1
+
+    let comments = await PostComment.query()
+      .where('post_id', post.id)
+      .orderBy('id', 'desc')
+      .preload('author')
+      .paginate(page)
+
+    let serial = comments.serialize()
+
+    let arr = [] as any;
+
+    for (let post of serial.data) {
+      //console.log(data)
+
+      //transform
+      let esc = await transform.item(post, CommentsTransformer)
+
+      let author = await transform.item(post.author, AuthorTransformer)
+
+      let toPush = {
+        ...esc,
+        author: author
+      }
+
+      arr.push(toPush)
+
+    }
+
+    serial.data = arr;
+
+    return response.json(serial)
+
+  }
 
 }

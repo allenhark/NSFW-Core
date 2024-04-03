@@ -14,12 +14,13 @@ Route.group(() => {
 
   //Like Unlike post
   Route.post('/like/:uuid', 'PostsController.like')
+  Route.get('/like/:uuid', 'PostsController.hasLiked')
 
   //post comment
-  Route.post('/comment/:uuid', 'PostsController.comment')
+  Route.post('/comment/:uuid', 'PostsController.createComment')
 
   //delete comment
-  Route.delete('/comment/:id', 'PostsController.deleteComment')
+  Route.delete('/comment/:uuid', 'PostsController.deleteComment')
 
   //report post
   Route.post('/report/:uuid', 'PostsController.report')
@@ -30,3 +31,6 @@ Route.group(() => {
 
 //User videos recommendations
 Route.get('v1/recommendations', 'PostsController.index')
+
+//get post comments
+Route.get('v1/comments/:uuid', 'PostsController.getComments')
