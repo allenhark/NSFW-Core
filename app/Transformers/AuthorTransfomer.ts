@@ -14,6 +14,9 @@ export default class AuthorTransformer extends TransformerAbstract {
       username: model.username,
       // refferalCode: model.refferal_code,
       country: model.country,
+      city: model.city,
+      region: model.region,
+      countryCode: model.countryCode,
       language: model.language,
       // wallet: model.wallet,
       //  wallet_network: model.wallet_network,
@@ -23,6 +26,7 @@ export default class AuthorTransformer extends TransformerAbstract {
       is_active: model.active,
       following: model.following,
       followers: model.followers,
+      fee: model.fee
       // subscribers: model.subscribers,
     }
   }

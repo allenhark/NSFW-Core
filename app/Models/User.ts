@@ -56,6 +56,15 @@ export default class User extends BaseModel {
   public country: string
 
   @column()
+  public region: string
+
+  @column()
+  public city: string
+
+  @column()
+  public countryCode: string
+
+  @column()
   public walletAddress: string
 
   @column()
@@ -81,6 +90,21 @@ export default class User extends BaseModel {
 
   @column()
   public subscribers: number
+
+  @column()
+  public fee: number
+
+  @column()
+  public totalEarnings: number
+
+  @column()
+  public unpaidEarnings: number
+
+  @column()
+  public totalSpent: number
+
+  @column()
+  public region: string
 
   @column({ serializeAs: null })
   public password: string

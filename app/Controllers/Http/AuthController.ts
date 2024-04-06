@@ -93,7 +93,9 @@ export default class AuthController {
 
     let data = request.all();
 
-    delete data.name
+    delete data?.name
+
+    console.log(data)
 
     // Merge the new values
     user.merge(data);
@@ -101,7 +103,12 @@ export default class AuthController {
     // Save to database
     await user.save();
 
-    let transformed = await transform.item(user, UserTransformer)
+    //query
+    let us = await User.find(user.id)
+
+    let transformed = await transform.item(us, UserTransformer)
+
+    console.log(transformed)
 
     return response.json(transformed);
 
