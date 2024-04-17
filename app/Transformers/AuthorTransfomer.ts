@@ -21,7 +21,7 @@ export default class AuthorTransformer extends TransformerAbstract {
       // wallet: model.wallet,
       //  wallet_network: model.wallet_network,
       background: model.background,
-      is_creator: model.is_creator,
+      is_creator: !!model.is_creator,
       // verified: model.verified,
       is_active: model.active,
       following: model.following,

@@ -8,6 +8,7 @@ import UserTransformer from "App/Transformers/UserTransformer";
 import AuthorTransformer from "App/Transformers/AuthorTransfomer";
 import PostComment from "App/Models/PostComment";
 import CommentsTransformer from "App/Transformers/CommentsTransfomer";
+import User from "App/Models/User";
 
 export default class PostsController {
 
@@ -88,7 +89,7 @@ export default class PostsController {
 
     let data = request.all()
 
-    console.log(data)
+    // console.log(data)
 
     post.merge(data)
 
@@ -110,6 +111,8 @@ export default class PostsController {
       .where('status', 'published')
       .preload('images')
       .preload('author')
+      .orderBy('id', 'desc')
+      .where('visibility', 'free')
       .paginate(page)
 
     let serial = await posts.serialize()
@@ -262,6 +265,70 @@ export default class PostsController {
 
       let toPush = {
         ...esc,
+        author: author
+      }
+
+      arr.push(toPush)
+
+    }
+
+    serial.data = arr;
+
+    return response.json(serial)
+
+  }
+
+  /**
+   * Get authors posts
+   */
+  async getAuthorsPosts({ request, response, params, transform }) {
+
+    let author = await User.findByOrFail('uuid', params.uuid)
+
+    let page = request.all().page || 1
+
+    let mode = request.all().mode || 'free'
+
+    console.log('mode', mode)
+
+    //get posts
+    let posts = Post.query()
+      .where('user_id', author.id)
+      .where('status', 'published')
+
+    if (mode == 'premium')
+      posts = posts.where('visibility', 'premium')
+
+    else
+      posts.where('visibility', 'free')
+
+    posts.preload('images')
+      .preload('author')
+
+    let q = await posts.paginate(page)
+
+    let serial = await q.serialize()
+
+    let arr = [] as any;
+
+    for (let post of serial.data) {
+
+      //transform
+      let esc = await transform.item(post, PostTransformer)
+
+      let media = await transform.collection(post.images, (media) => {
+        //console.log(media)
+        return {
+          ...media.media,
+          id: media.id
+        }
+      })
+
+      let author = await transform.item(post.author, AuthorTransformer)
+
+      let toPush = {
+        ...esc,
+        media: media,
         author: author
       }
 

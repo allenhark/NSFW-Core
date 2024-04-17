@@ -34,3 +34,6 @@ Route.get('v1/recommendations', 'PostsController.index')
 
 //get post comments
 Route.get('v1/comments/:uuid', 'PostsController.getComments')
+
+//author posts
+Route.get('v1/author/:uuid', 'PostsController.getAuthorsPosts')
