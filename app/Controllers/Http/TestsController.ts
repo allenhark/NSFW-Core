@@ -5,11 +5,27 @@ import { rword } from 'rword';
 import _ from 'lodash'
 import Ws from 'App/Services/Ws'
 import Event from '@ioc:Adonis/Core/Event'
-
+import Axios from 'axios'
 
 const seedrandom = require('seedrandom');
 
 export default class TestsController {
+
+  async countries({ response }) {
+
+    let { data } = await Axios.get('https://countriesnow.space/api/v0.1/countries')
+
+
+    for (let country of data.data) {
+
+      let { data } = await Axios.get(`https://restcountries.com/v3.1/name/${country.name}`)
+
+      console.log(data)
+
+    }
+
+    return response.json(data.data)
+  }
 
   async index({ request, response }) {
 

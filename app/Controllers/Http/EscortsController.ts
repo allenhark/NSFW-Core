@@ -1,8 +1,8 @@
 // import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Escort from "App/Models/Escort";
 import EscortTransformer from "App/Transformers/EscortTransformer";
-import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 import EscortMedia from "App/Models/EscortMedia";
+import { ResponsiveAttachment } from '@ioc:Adonis/Addons/ResponsiveAttachment'
 
 export default class EscortsController {
 
@@ -180,7 +180,7 @@ export default class EscortsController {
 
     let attachment = new EscortMedia()
 
-    attachment.media = await Attachment.fromFile(file)
+    attachment.media = await ResponsiveAttachment.fromFile(file)
 
     attachment.escortId = escort.id
 

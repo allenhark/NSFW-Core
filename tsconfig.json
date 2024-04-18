@@ -37,7 +37,8 @@
       "adonis5-scheduler",
       "@adonisjs/attachment-lite",
       "@adonisjs/drive-s3",
-      "adonis-bumblebee-ts"
+      "adonis-bumblebee-ts",
+      "adonis-responsive-attachment"
     ]
   }
 }

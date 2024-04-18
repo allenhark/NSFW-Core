@@ -2,7 +2,7 @@
 import Device from "App/Models/Device";
 import User from "App/Models/User";
 import UserTransformer from "App/Transformers/UserTransformer";
-import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
+import { ResponsiveAttachment } from '@ioc:Adonis/Addons/ResponsiveAttachment'
 
 const emojiStrip = require('emoji-strip')
 
@@ -288,7 +288,7 @@ export default class AuthController {
 
 
     //save to user
-    user.background = await Attachment.fromFile(file)
+    user.background = await ResponsiveAttachment.fromFile(file)
 
     await user.save()
 
@@ -316,7 +316,7 @@ export default class AuthController {
 
 
     //save to user
-    user.avatar = await Attachment.fromFile(file)
+    user.avatar = await ResponsiveAttachment.fromFile(file)
 
     await user.save()
 

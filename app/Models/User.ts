@@ -2,13 +2,10 @@ import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
 import { column, beforeSave, BaseModel, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
 import { nanoid } from 'nanoid'
-import {
-  attachment,
-  AttachmentContract
-} from '@ioc:Adonis/Addons/AttachmentLite'
 import Payment from './Payment'
 import Follower from './Follower'
 import Subscription from './Subscription'
+import { responsiveAttachment, ResponsiveAttachmentContract } from '@ioc:Adonis/Addons/ResponsiveAttachment'
 export default class User extends BaseModel {
   @column({ isPrimary: true })
   public id: number
@@ -40,11 +37,43 @@ export default class User extends BaseModel {
   @column()
   public email: string
 
-  @attachment({ folder: 'avatars', preComputeUrl: true })
-  public avatar: AttachmentContract | null
 
-  @attachment({ folder: 'backgrounds', preComputeUrl: true })
-  public background: AttachmentContract | null
+  @responsiveAttachment({
+    folder: 'profile/avatar', breakpoints: {
+      medium: 750,
+      small: 250,
+    },
+    forceFormat: 'webp',
+    optimizeOrientation: true,
+    responsiveDimensions: true,
+    preComputeUrls: true,
+    blurhash: {
+      enabled: true,
+      componentX: 4,
+      componentY: 3
+    },
+    keepOriginal: false
+  })
+  public avatar: ResponsiveAttachmentContract | null
+
+  @responsiveAttachment({
+    folder: 'profile/backgrounds', breakpoints: {
+      large: 1000,
+      medium: 750,
+      small: 250,
+    },
+    forceFormat: 'webp',
+    optimizeOrientation: true,
+    responsiveDimensions: true,
+    preComputeUrls: true,
+    keepOriginal: false,
+    blurhash: {
+      enabled: true,
+      componentX: 4,
+      componentY: 3
+    },
+  })
+  public background: ResponsiveAttachmentContract | null
 
   @column()
   public wallet: string

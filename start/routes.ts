@@ -28,6 +28,8 @@ Route.post('v1/auth', 'AuthController.login')
 
 Route.get('test', 'TestsController.index')
 
+Route.get('countries', 'TestsController.countries')
+
 //register device
 Route.post('v1/auth/device', 'AuthController.registerDevice')
 Route.post('v1/auth/register', 'AuthController.register')

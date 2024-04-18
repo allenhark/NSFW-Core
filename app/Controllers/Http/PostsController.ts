@@ -1,14 +1,13 @@
 // import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 import Post from "App/Models/Post"
-import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 import PostImage from "App/Models/PostImage";
 import PostTransformer from "App/Transformers/PostTransformer";
-import UserTransformer from "App/Transformers/UserTransformer";
 import AuthorTransformer from "App/Transformers/AuthorTransfomer";
 import PostComment from "App/Models/PostComment";
 import CommentsTransformer from "App/Transformers/CommentsTransfomer";
 import User from "App/Models/User";
+import { ResponsiveAttachment } from '@ioc:Adonis/Addons/ResponsiveAttachment'
 
 export default class PostsController {
 
@@ -51,7 +50,7 @@ export default class PostsController {
 
     let attachment = new PostImage()
 
-    attachment.media = await Attachment.fromFile(file)
+    attachment.media = await ResponsiveAttachment.fromFile(file)
 
     attachment.postId = escort.id
 

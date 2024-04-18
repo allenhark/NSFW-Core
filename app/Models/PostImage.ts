@@ -4,6 +4,10 @@ import {
   attachment,
   AttachmentContract
 } from '@ioc:Adonis/Addons/AttachmentLite'
+import {
+  responsiveAttachment,
+  ResponsiveAttachmentContract
+} from '@ioc:Adonis/Addons/ResponsiveAttachment'
 
 
 export default class PostImage extends BaseModel {
@@ -13,8 +17,24 @@ export default class PostImage extends BaseModel {
   @column()
   public postId: number
 
-  @attachment({ folder: 'post_images', preComputeUrl: true })
-  public media: AttachmentContract | null
+  @responsiveAttachment({
+    folder: 'post_images', breakpoints: {
+      large: 1000,
+      medium: 750,
+      small: 250,
+    },
+    forceFormat: 'webp',
+    optimizeOrientation: true,
+    responsiveDimensions: true,
+    preComputeUrls: true,
+    blurhash: {
+      enabled: true,
+      componentX: 4,
+      componentY: 3
+    },
+    keepOriginal: false
+  })
+  public media: ResponsiveAttachmentContract | null
 
   @column()
   public position: number

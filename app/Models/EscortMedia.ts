@@ -1,9 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
-import {
-  attachment,
-  AttachmentContract
-} from '@ioc:Adonis/Addons/AttachmentLite'
+import { responsiveAttachment, ResponsiveAttachmentContract } from '@ioc:Adonis/Addons/ResponsiveAttachment'
 
 export default class EscortMedia extends BaseModel {
   @column({ isPrimary: true })
@@ -15,8 +12,24 @@ export default class EscortMedia extends BaseModel {
   @column()
   public type: string
 
-  @attachment({ folder: 'escort-medias', preComputeUrl: true })
-  public media: AttachmentContract | null
+  @responsiveAttachment({
+    folder: 'profile/escorts', breakpoints: {
+      large: 1000,
+      medium: 750,
+      small: 250,
+    },
+    forceFormat: 'webp',
+    optimizeOrientation: true,
+    responsiveDimensions: true,
+    preComputeUrls: true,
+    blurhash: {
+      enabled: true,
+      componentX: 4,
+      componentY: 3
+    },
+    keepOriginal: false
+  })
+  public media: ResponsiveAttachmentContract | null
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
