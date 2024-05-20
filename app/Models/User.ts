@@ -135,6 +135,18 @@ export default class User extends BaseModel {
   @column()
   public totalSpent: number
 
+  @column()
+  public firstRun: boolean
+
+  @column()
+  public age: number
+
+  @column()
+  public sex: string
+
+  @column()
+  public orientation: string
+
   @column({ serializeAs: null })
   public password: string
 

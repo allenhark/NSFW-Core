@@ -3,7 +3,9 @@ import Device from "App/Models/Device";
 import User from "App/Models/User";
 import UserTransformer from "App/Transformers/UserTransformer";
 import { ResponsiveAttachment } from '@ioc:Adonis/Addons/ResponsiveAttachment'
-
+import Location from "App/Models/Location";
+import Database from "@ioc:Adonis/Lucid/Database";
+import { DateTime } from 'luxon'
 const emojiStrip = require('emoji-strip')
 
 export default class AuthController {
@@ -117,11 +119,14 @@ export default class AuthController {
   /**
  * Register device
  */
-  async registerDevice({ request, response }) {
+  async registerDevice({ request, response, auth }) {
+
+    let user = await auth.use('api').authenticate()
 
     let device = request.all();
 
-    console.log(device)
+    //console.log(device)
+    device.userId = user.id;
 
     device.deviceName = emojiStrip(device.deviceName);
 
@@ -130,6 +135,7 @@ export default class AuthController {
 
     if (deviceData) {
       deviceData.fcmToken = device.fcmToken
+      device.userId = user.id
 
       //save device
       await deviceData.save();
@@ -323,6 +329,55 @@ export default class AuthController {
     let transformed = await transform.item(user, UserTransformer)
 
     return response.json(transformed)
+  }
+
+  /**
+   * Update or create user location
+   */
+  async updateLocation({ request, response, auth }) {
+
+    let user = await auth.use('api').authenticate()
+
+    let { altitude, latitude, longitude } = request.all();
+    //let point = knex.raw(`POINT(${longitude}, ${latitude})`)
+
+    //update location
+    let locat = {
+      user_id: user.id,
+      location: `ST_GeomFromText('POINT(${longitude} ${latitude})')`,
+      altitude: altitude
+    }
+
+    let loc; // = await Location.updateOrCreate({ userId: user.id }, locat)
+
+    let exist = await Location.query()
+      .where('user_id', user.id)
+      .first();
+
+    const updatedAt = DateTime.now().toSQL();
+
+    console.log(exist, updatedAt)
+
+    if (!exist) {
+      loc = await Database.rawQuery(`
+                    INSERT INTO locations (user_id, location, altitude, updated_at, created_at)
+                    VALUES (${user.id}, ST_GeomFromText('POINT(${longitude} ${latitude})'), ${altitude}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+      `)
+
+    } else {
+      loc = await Database.rawQuery(`
+                    UPDATE locations
+                    SET location = ST_GeomFromText('POINT(${longitude} ${latitude})'),
+                        altitude = 1590,
+                        updated_at = CURRENT_TIMESTAMP
+                    WHERE user_id = ${user.id}
+                  `)
+
+    }
+
+    // console.log(loc)
+
+    return response.json({ message: "Location updated successfully" });
   }
 
 

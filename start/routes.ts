@@ -76,6 +76,9 @@ Route.group(() => {
   Route.post('auth/avatar', 'AuthController.updateAvator');
   Route.post('auth/background', 'AuthController.updateBackground');
 
+  //location
+  Route.post('auth/location', 'AuthController.updateLocation');
+
 })
   .prefix('v1')
   .middleware(['auth'])

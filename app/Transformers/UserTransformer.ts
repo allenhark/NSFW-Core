@@ -28,7 +28,11 @@ export default class UserTransformer extends TransformerAbstract {
       followers: model.followers,
       subscribers: model.subscribers,
       fee: model.fee,
-      wallet_address: model.walletAddress
+      wallet_address: model.walletAddress,
+      first_run: model.firstRun,
+      age: model.age,
+      sex: model.sex,
+      orientation: model.orientation,
     }
   }
 }
