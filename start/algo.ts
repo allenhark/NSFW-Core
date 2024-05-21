@@ -7,10 +7,10 @@
 | boot.
 |
 */
-console.log('Algo file loaded')
+// console.log('Algo file loaded')
 
-import Generator from '../algo/Generator'
+// import Generator from '../algo/Generator'
 
-const generator = new Generator();
+// const generator = new Generator();
 
 //generator.endlessLoop()

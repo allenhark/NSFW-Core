@@ -6,6 +6,7 @@ import Payment from './Payment'
 import Follower from './Follower'
 import Subscription from './Subscription'
 import { responsiveAttachment, ResponsiveAttachmentContract } from '@ioc:Adonis/Addons/ResponsiveAttachment'
+import UserMedia from './UserMedia'
 export default class User extends BaseModel {
   @column({ isPrimary: true })
   public id: number
@@ -164,6 +165,9 @@ export default class User extends BaseModel {
 
   @hasMany(() => Follower, { foreignKey: 'userId' })
   public followingList: HasMany<typeof Follower>
+
+  @hasMany(() => UserMedia)
+  public media: HasMany<typeof UserMedia>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

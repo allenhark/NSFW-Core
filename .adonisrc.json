@@ -17,31 +17,7 @@
   "preloads": [
     "./start/routes",
     "./start/kernel",
-    "./start/events",
-    {
-      "file": "./start/wsKernel",
-      "environment": [
-        "web",
-        "test"
-      ],
-      "optional": true
-    },
-    {
-      "file": "./start/algo",
-      "environment": [
-        "web",
-        "test"
-      ],
-      "optional": true
-    },
-    {
-      "file": "./start/socket",
-      "environment": [
-        "web",
-        "test"
-      ],
-      "optional": true
-    }
+    "./start/events"
   ],
   "providers": [
     "./providers/AppProvider",
@@ -49,7 +25,6 @@
     "@adonisjs/lucid",
     "@adonisjs/auth",
     "@adonisjs/redis",
-    "@ruby184/adonis-socket.io",
     "adonis5-scheduler",
     "@adonisjs/attachment-lite",
     "@adonisjs/drive-s3",
