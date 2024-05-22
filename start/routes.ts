@@ -34,6 +34,8 @@ Route.get('countries', 'TestsController.countries')
 Route.post('v1/auth/device', 'AuthController.registerDevice')
 Route.post('v1/auth/register', 'AuthController.register')
 
+Route.post('webhook', 'WebhooksController.index')
+
 
 Route.group(() => {
 
@@ -79,6 +81,8 @@ Route.group(() => {
   //location
   Route.post('auth/location', 'AuthController.updateLocation');
 
+  //get categories
+  Route.get('categories', 'ProfilesController.categories')
 })
   .prefix('v1')
   .middleware(['auth'])

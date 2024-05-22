@@ -6,10 +6,45 @@ import _ from 'lodash'
 import Ws from 'App/Services/Ws'
 import Event from '@ioc:Adonis/Core/Event'
 import Axios from 'axios'
+import User from "App/Models/User";
+import Env from '@ioc:Adonis/Core/Env'
 
 const seedrandom = require('seedrandom');
 
 export default class TestsController {
+
+  async index({ response }) {
+    //get user 1
+    let user = await User.query().firstOrFail()
+
+    let post = {
+      username: user.uuid,
+    }
+
+    let auth = {
+      "Authorization": `Bearer ${Env.get('AGORA_TOKEN')}`
+    }
+
+    //register user to agora
+    try {
+
+      let { data } = await Axios.post(`https://${Env.get('AGORA_HOST')}/${Env.get('AGORA_ORG')}/${Env.get('AGORA_APP')}/users`,
+        post,
+        { headers: auth }
+      )
+
+      console.log(data)
+
+      return response.json(data)
+
+    }
+    catch (e) {
+      console.log(e)
+
+      return response.json({ error: e.data })
+    }
+
+  }
 
   async countries({ response }) {
 
@@ -27,7 +62,7 @@ export default class TestsController {
     return response.json(data.data)
   }
 
-  async index({ request, response }) {
+  async indexS({ request, response }) {
 
     let seed;
 

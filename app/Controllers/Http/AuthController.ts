@@ -6,6 +6,8 @@ import { ResponsiveAttachment } from '@ioc:Adonis/Addons/ResponsiveAttachment'
 import Location from "App/Models/Location";
 import Database from "@ioc:Adonis/Lucid/Database";
 import { DateTime } from 'luxon'
+import axios from "axios";
+
 const emojiStrip = require('emoji-strip')
 
 export default class AuthController {
@@ -97,7 +99,7 @@ export default class AuthController {
 
     delete data?.name
 
-    console.log(data)
+    //console.log(data)
 
     // Merge the new values
     user.merge(data);
@@ -110,7 +112,7 @@ export default class AuthController {
 
     let transformed = await transform.item(us, UserTransformer)
 
-    console.log(transformed)
+    ////console.log(transformed)
 
     return response.json(transformed);
 
@@ -125,7 +127,7 @@ export default class AuthController {
 
     let device = request.all();
 
-    //console.log(device)
+    ////console.log(device)
     device.userId = user.id;
 
     device.deviceName = emojiStrip(device.deviceName);
@@ -284,7 +286,7 @@ export default class AuthController {
 
     let file = request.file('image')!
 
-    //console.log(request.all(), file)
+    ////console.log(request.all(), file)
 
     if (!file) {
       return response.status(400).json({
@@ -312,7 +314,7 @@ export default class AuthController {
 
     let file = request.file('image')!
 
-    //console.log(request.all(), file)
+    ////console.log(request.all(), file)
 
     if (!file) {
       return response.status(400).json({
@@ -350,32 +352,23 @@ export default class AuthController {
 
     let loc; // = await Location.updateOrCreate({ userId: user.id }, locat)
 
-    let exist = await Location.query()
-      .where('user_id', user.id)
-      .first();
+    //get location
+    let { data } = await axios.get(`https://api.geoapify.com/v1/geocode/reverse?lat=${latitude}&lon=${longitude}&format=json&apiKey=86036744e4ef4c47a59398c90c75818c`)
 
-    const updatedAt = DateTime.now().toSQL();
+    // console.log(data)
+    let street = data.results[0].road ? data.results[0].road : data.results[0].street;
 
-    console.log(exist, updatedAt)
+    //console.log(street)
 
-    if (!exist) {
-      loc = await Database.rawQuery(`
-                    INSERT INTO locations (user_id, location, altitude, updated_at, created_at)
-                    VALUES (${user.id}, ST_GeomFromText('POINT(${longitude} ${latitude})'), ${altitude}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
-      `)
-
-    } else {
-      loc = await Database.rawQuery(`
-                    UPDATE locations
+    loc = await Database.rawQuery(`
+                    UPDATE users
                     SET location = ST_GeomFromText('POINT(${longitude} ${latitude})'),
                         altitude = 1590,
+                        road = '${street}',
+                        state = '${data.results[0].state}',
                         updated_at = CURRENT_TIMESTAMP
-                    WHERE user_id = ${user.id}
+                    WHERE id = ${user.id}
                   `)
-
-    }
-
-    // console.log(loc)
 
     return response.json({ message: "Location updated successfully" });
   }

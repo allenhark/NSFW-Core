@@ -42,6 +42,7 @@
     "proxy-addr": "^2.0.7",
     "pure-rand": "^6.0.4",
     "random-seed-weighted-chooser": "^1.1.10",
+    "react-native-sectioned-multi-select": "^0.10.0",
     "reflect-metadata": "^0.2.1",
     "rword": "^3.2.1",
     "seedrandom": "^3.0.5",

@@ -3,7 +3,7 @@ import Category from 'App/Models/Category'
 export default class extends BaseSeeder {
   public async run() {
 
-    const list = "Orgy,Anal,Role Play,Voyeurism,Threesome,Foot Fetish,Dominantion and Submission,Bondage,Cuckolding,Wax Play"
+    const list = "Orgy,Anal,Role Play,Voyeurism,Threesome,Foot Fetish,Dominantion and Submission,Bondage,Cuckolding,Wax Play,Lesbian Show,Raw BJ,BJ,GFE,Cum On Body,Cum In Mouth,Massage,Rimming,Travel Companion"
     const interests = "Travel,Outdoors,Music,Reading,Writing,Art,Photography,Cooking,Video Games,Board Games,Card Games,Tabletop Games,Comics,TV Shows,Books,Podcasts,Food,Drinks,Tea,Coffee,Beer,Wine,Alchohol,Fishing,Dogs,Cats,Sports,Dancing"
     // populate categories with NSFW interests
 

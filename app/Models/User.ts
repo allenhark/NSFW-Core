@@ -7,6 +7,7 @@ import Follower from './Follower'
 import Subscription from './Subscription'
 import { responsiveAttachment, ResponsiveAttachmentContract } from '@ioc:Adonis/Addons/ResponsiveAttachment'
 import UserMedia from './UserMedia'
+import UserCategory from './UserCategory'
 export default class User extends BaseModel {
   @column({ isPrimary: true })
   public id: number
@@ -154,6 +155,30 @@ export default class User extends BaseModel {
   @column()
   public rememberMeToken: string | null
 
+  @column()
+  public location: any
+
+  @column()
+  public altitude: number
+
+  @column()
+  public visible: boolean
+
+  @column()
+  public bio: string
+
+  @column()
+  public road: string
+
+  @column()
+  public state: string
+
+  @column()
+  public agora: string
+
+  @column()
+  public isOnline: boolean
+
   @hasMany(() => Payment)
   public payments: HasMany<typeof Payment>
 
@@ -168,6 +193,9 @@ export default class User extends BaseModel {
 
   @hasMany(() => UserMedia)
   public media: HasMany<typeof UserMedia>
+
+  @hasMany(() => UserCategory)
+  public categories: HasMany<typeof UserCategory>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

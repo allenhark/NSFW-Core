@@ -33,6 +33,9 @@ export default class UserTransformer extends TransformerAbstract {
       age: model.age,
       sex: model.sex,
       orientation: model.orientation,
+      isOnline: model.isOnline,
+      bio: model.bio,
+      agora: model.agora,
     }
   }
 }
